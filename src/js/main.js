@@ -316,8 +316,15 @@ $(document).ready(function(){
         // validate input
         if($("#edititeminput").val() == "") {
             showMessage('warning',"Account entry can't be empty!", true);
+            // samePasswordWarning("hello");
             return;
         }
+        //alya check if password similar to other password
+        if(samePasswordWarning($("#edititeminputpw").val()) == false){
+            showMessage('warning', 'This password has already been used!',true);
+            return;
+        }
+            
 
         // lock form
         $("#editbtn").attr("disabled",true);
@@ -617,10 +624,11 @@ function edit(row){
     $("#edit").data("id", id);
     $("#edit").modal("show");
 }
+//tag show password
 function clicktoshow(id){
     backend.resetTimeout();
     id = parseInt(id);
-    backend.accounts[id].getPassword()
+    backend.accounts[id].getPassword() //get password
         .then(function(pwd){
             $("#"+id).empty()
                 .append($('<span class="pwdshowbox passwordText"></span>'))
@@ -653,6 +661,39 @@ function clicktohide(id){
                         .append('<span class="glyphicon glyphicon-asterisk"></span><span class="glyphicon glyphicon-asterisk"></span><span class="glyphicon glyphicon-asterisk"></span><span class="glyphicon glyphicon-asterisk"></span><span class="glyphicon glyphicon-asterisk"></span><span class="glyphicon glyphicon-asterisk"></span>') );
     $("#" + id).parent().find(".hidePassword")[0].remove();
     $("#" + id).parent().find(".copytoClipboard")[0].remove();
+}
+//same password warning method
+function samePasswordWarning(newPassword){
+    var samePass = false;
+    backend.resetTimeout();
+    var pwdArr = new Array();
+    for(let i=1; i<backend.accounts.length; i++){
+        backend.accounts[i].getPassword().then(function(result) {//password is in Promise object
+            pwdArr.push(result);
+            console.log(pwdArr[i-1]);
+            console.log(pwdArr[i-1].indexOf(newPassword));
+            if(pwdArr[i-1].indexOf(newPassword) != -1){
+                console.log("SAME PASSWORD");
+                samePass = true;
+                return;
+            }
+        });
+
+        if(samePass == true)
+            return samePass;
+
+    }
+    return false;
+        
+}
+function objToString (obj) {
+    var str = '';
+    for (var p in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, p)) {
+            str += p + '::' + obj[p] + '\n';
+        }
+    }
+    return str;
 }
 function showuploadfiledlg(id){
     $("#uploadfiledlg").modal("hide");
