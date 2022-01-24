@@ -658,7 +658,7 @@ function clicktohide(id){
     $("#" + id).parent().find(".copytoClipboard")[0].remove();
 }
 
-//same password warning method alya
+//same password warning function
 function samePasswordWarning(newPassword){
     for(let i=1; i<backend.accounts.length; i++){
         backend.accounts[i].getPassword().then(async function(result) {//password is in Promise object
@@ -669,8 +669,7 @@ function samePasswordWarning(newPassword){
                 return;
             }
         });
-    }
-        
+    }      
 }
 function checkPassword(newPassword){
     backend.resetTimeout();
