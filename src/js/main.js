@@ -316,16 +316,11 @@ $(document).ready(function(){
         // validate input
         if($("#edititeminput").val() == "") {
             showMessage('warning',"Account entry can't be empty!", true);
-            // samePasswordWarning("hello");
             return;
         }
-        //alya check if password similar to other password
-        if(samePasswordWarning($("#edititeminputpw").val()) == false){
-            showMessage('warning', 'This password has already been used!',true);
-            return;
-        }
-            
-
+        
+        samePasswordWarning($("#edititeminputpw").val());
+        
         // lock form
         $("#editbtn").attr("disabled",true);
         $("#edititeminput").attr("readonly",true);
@@ -662,29 +657,33 @@ function clicktohide(id){
     $("#" + id).parent().find(".hidePassword")[0].remove();
     $("#" + id).parent().find(".copytoClipboard")[0].remove();
 }
-//same password warning method
+
+//same password warning method alya
 function samePasswordWarning(newPassword){
-    var samePass = false;
-    backend.resetTimeout();
-    var pwdArr = new Array();
     for(let i=1; i<backend.accounts.length; i++){
-        backend.accounts[i].getPassword().then(function(result) {//password is in Promise object
-            pwdArr.push(result);
-            console.log(pwdArr[i-1]);
-            console.log(pwdArr[i-1].indexOf(newPassword));
-            if(pwdArr[i-1].indexOf(newPassword) != -1){
+        backend.accounts[i].getPassword().then(async function(result) {//password is in Promise object
+            console.log(result);
+            if(result.indexOf($("#edititeminputpw").val()) != -1){
                 console.log("SAME PASSWORD");
-                samePass = true;
+                showMessage('warning', 'Warning! This password has already been used! It is advisable to change your password into something different.',true);
                 return;
             }
         });
-
-        if(samePass == true)
-            return samePass;
-
     }
-    return false;
         
+}
+function checkPassword(newPassword){
+    backend.resetTimeout();
+    backend.then(function() {//password is in Promise object
+        for(let i=1; i<backend.accounts.length; i++){
+            console.log(backend.accounts[i].getPassword());
+            console.log(backend.accounts[i].getPassword().indexOf(newPassword));
+            if(backend.accounts[i].getPassword().indexOf(newPassword) != -1){
+                console.log("SAME PASSWORD");
+                return true;
+            }
+        }
+    });
 }
 function objToString (obj) {
     var str = '';
