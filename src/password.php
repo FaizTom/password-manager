@@ -221,6 +221,7 @@ echoheader();
                                 title="Show current password"><i class="glyphicon glyphicon-eye-open"></i></button>
                         </span>
                     </div>
+                    <span id="pass-check-same"></span>
                 </div>
             </form>
             </div>

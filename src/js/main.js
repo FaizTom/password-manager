@@ -312,14 +312,22 @@ $(document).ready(function(){
                 }
             });
     });
+    $('#edititeminputpw').on('input', function() {
+        if($("#edititeminputpw").val() != ""){//if not empty
+            samePasswordWarning();
+        }
+        else{
+            $("#pass-check-same").text("");
+            $("#editbtn").attr("disabled", false);
+        }
+            
+    });
     $("#editbtn").click(function(){
         // validate input
         if($("#edititeminput").val() == "") {
             showMessage('warning',"Account entry can't be empty!", true);
             return;
         }
-        
-        samePasswordWarning($("#edititeminputpw").val());
         
         // lock form
         $("#editbtn").attr("disabled",true);
@@ -659,16 +667,29 @@ function clicktohide(id){
 }
 
 //same password warning function
-function samePasswordWarning(newPassword){
+function samePasswordWarning(){
+    //reset
+    $("#pass-check-same").text("");
+    $("#editbtn").attr("disabled", false);
+    var samePass = false;
     for(let i=1; i<backend.accounts.length; i++){
         backend.accounts[i].getPassword().then(async function(result) {//password is in Promise object
-            console.log(result);
-            if(result.indexOf($("#edititeminputpw").val()) != -1){
-                console.log("SAME PASSWORD");
-                showMessage('warning', 'Warning! This password has already been used! It is advisable to change your password into something different.',true);
-                return;
+            if($("#edititeminputpw").val() == result){
+                samePass=true;
+                $("#pass-check-same").text("Warning! This password has already been used!");
+                $("#editbtn").attr("disabled", true);
+            }
+            else if($("#pass-check-same").text() == "Warning! This password has already been used!"){
+                $("#pass-check-same").text("Warning! This password has already been used!");//warning stay
+                $("#editbtn").attr("disabled", true);
+            }   
+            else{
+                $("#pass-check-same").text("");
+                $("#editbtn").attr("disabled", false);
             }
         });
+        if(samePass==true)
+            break;
     }      
 }
 function checkPassword(newPassword){
