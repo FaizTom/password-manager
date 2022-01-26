@@ -15,7 +15,6 @@ echoheader();
 <script src="js/common/cryptoWrapper.js"></script>
 <script src="js/plugin.js"></script>
 <script src="js/main.js"></script>
-<script src="js/require.js"></script>
 <script src="js/plugins/linkButton.js"></script>
 <script src="js/plugins/tags.js"></script>
 <script src="js/plugins/passwordAge.js"></script>
@@ -353,28 +352,6 @@ echoheader();
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="uploadfilebtn">Submit</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal" tabindex="-1" role="dialog" id="showRatingScore">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <div class="h4" id="h4rating"></div>
-            </div>
-            <div class="modal-body">
-            <form method="post">
-            <div class="form-control" id="ratingDetails"></div>
-            </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
             </div>
         </div>
     </div>
