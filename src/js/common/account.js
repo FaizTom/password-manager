@@ -119,6 +119,7 @@ class Account {
     getPassword(){
         return this.encryptionWrapper.decryptPassword(this.name, this.enpassword);
     }
+
     setPassword(password){
         var self = this;
         return this.encryptionWrapper.encryptPassword(this.name, password)

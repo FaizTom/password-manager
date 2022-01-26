@@ -312,13 +312,23 @@ $(document).ready(function(){
                 }
             });
     });
+    $('#edititeminputpw').on('input', function() {
+        if($("#edititeminputpw").val() != ""){//if not empty
+            samePasswordWarning();
+        }
+        else{
+            $("#pass-check-same").text("");
+            $("#editbtn").attr("disabled", false);
+        }
+            
+    });
     $("#editbtn").click(function(){
         // validate input
         if($("#edititeminput").val() == "") {
             showMessage('warning',"Account entry can't be empty!", true);
             return;
         }
-
+        
         // lock form
         $("#editbtn").attr("disabled",true);
         $("#edititeminput").attr("readonly",true);
@@ -617,10 +627,11 @@ function edit(row){
     $("#edit").data("id", id);
     $("#edit").modal("show");
 }
+//tag show password
 function clicktoshow(id){
     backend.resetTimeout();
     id = parseInt(id);
-    backend.accounts[id].getPassword()
+    backend.accounts[id].getPassword() //get password
         .then(function(pwd){
             $("#"+id).empty()
                 .append($('<span class="pwdshowbox passwordText"></span><span class="emni"></span>'))
@@ -658,6 +669,55 @@ function clicktohide(id){
                         .append('<span class="glyphicon glyphicon-asterisk"></span><span class="glyphicon glyphicon-asterisk"></span><span class="glyphicon glyphicon-asterisk"></span><span class="glyphicon glyphicon-asterisk"></span><span class="glyphicon glyphicon-asterisk"></span><span class="glyphicon glyphicon-asterisk"></span>') );
     $("#" + id).parent().find(".hidePassword")[0].remove();
     $("#" + id).parent().find(".copytoClipboard")[0].remove();
+}
+
+//same password warning function
+function samePasswordWarning(){
+    //reset
+    $("#pass-check-same").text("");
+    $("#editbtn").attr("disabled", false);
+    var samePass = false;
+    for(let i=1; i<backend.accounts.length; i++){
+        backend.accounts[i].getPassword().then(async function(result) {//password is in Promise object
+            if($("#edititeminputpw").val() == result){
+                samePass=true;
+                $("#pass-check-same").text("Warning! This password has already been used!");
+                $("#editbtn").attr("disabled", true);
+            }
+            else if($("#pass-check-same").text() == "Warning! This password has already been used!"){
+                $("#pass-check-same").text("Warning! This password has already been used!");//warning stay
+                $("#editbtn").attr("disabled", true);
+            }   
+            else{
+                $("#pass-check-same").text("");
+                $("#editbtn").attr("disabled", false);
+            }
+        });
+        if(samePass==true)
+            break;
+    }      
+}
+function checkPassword(newPassword){
+    backend.resetTimeout();
+    backend.then(function() {//password is in Promise object
+        for(let i=1; i<backend.accounts.length; i++){
+            console.log(backend.accounts[i].getPassword());
+            console.log(backend.accounts[i].getPassword().indexOf(newPassword));
+            if(backend.accounts[i].getPassword().indexOf(newPassword) != -1){
+                console.log("SAME PASSWORD");
+                return true;
+            }
+        }
+    });
+}
+function objToString (obj) {
+    var str = '';
+    for (var p in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, p)) {
+            str += p + '::' + obj[p] + '\n';
+        }
+    }
+    return str;
 }
 function showuploadfiledlg(id){
     $("#uploadfiledlg").modal("hide");
