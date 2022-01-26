@@ -731,19 +731,7 @@ function samePasswordWarning(){
             break;
     }      
 }
-function checkPassword(newPassword){
-    backend.resetTimeout();
-    backend.then(function() {//password is in Promise object
-        for(let i=1; i<backend.accounts.length; i++){
-            console.log(backend.accounts[i].getPassword());
-            console.log(backend.accounts[i].getPassword().indexOf(newPassword));
-            if(backend.accounts[i].getPassword().indexOf(newPassword) != -1){
-                console.log("SAME PASSWORD");
-                return true;
-            }
-        }
-    });
-}
+
 function objToString (obj) {
     var str = '';
     for (var p in obj) {
