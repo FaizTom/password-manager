@@ -11,7 +11,7 @@ function echofooter()
 function echoheader()
 {
     header('X-Frame-Options: DENY');
-    header("Content-Security-Policy: default-src 'self';");
+    // header("Content-Security-Policy: default-src 'self';");
     header('Pragma: public');
     $expires = 86400;
     header('Cache-Control: max-age='.$expires.', must-revalidate');

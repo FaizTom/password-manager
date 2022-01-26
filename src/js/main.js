@@ -634,7 +634,7 @@ function clicktoshow(id){
     backend.accounts[id].getPassword() //get password
         .then(function(pwd){
             $("#"+id).empty()
-                .append($('<span class="pwdshowbox passwordText"></span>'))
+                .append($('<span class="pwdshowbox passwordText"></span><span class="emni"></span>'))
                 .after($('<a title="Hide" class="cellOptionButton hidePassword"></a>')
                     .on('click',{"index":id},function(event){clicktohide(event.data.index);})
                     .append($('<span class="glyphicon glyphicon-eye-close"></span>')))
@@ -652,10 +652,15 @@ function clicktoshow(id){
                                 });
                         }));
             $("#"+id+" > .pwdshowbox").text(pwd);
+
         })
         .catch(function(){
             $("#"+id).text("Oops, some error occurs!");
         });
+
+
+
+
 }
 function clicktohide(id){
     backend.resetTimeout();
@@ -798,3 +803,7 @@ function showdetail(index){
     callPlugins("showDetails",{"account":account, "out":s});
     $("#showdetails").modal("show");
 }
+
+
+
+

@@ -220,9 +220,42 @@ echoheader();
                                 title="Show current password"><i class="glyphicon glyphicon-eye-open"></i></button>
                         </span>
                     </div>
+
+                    <span class="pass-chck-mesg"></span>
                     <span id="pass-check-same"></span>
+
                 </div>
             </form>
+            <script>
+                window.onload = function (){
+                    var passField = document.querySelector("#edititeminputpw");
+                    var newMSG = document.querySelector('.pass-chck-mesg');
+                    var passStrenth;
+                    var passColor;
+                    passField.addEventListener('keyup', function (){
+                        if(this.value.length > 6){
+                            passStrenth = 50;
+                            passColor = "#88DD99";
+                        }else{
+                            passColor = "red";
+                            passStrenth = 10;
+                        }
+                        if(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()+=-\?;,./{}|\":<>\[\]\\\' ~_]).{8,}/.test(this.value)){
+                            passStrenth = 100;
+                            passColor = "green";
+                        }
+
+                        newMSG.style.width = passStrenth + "%";
+                        newMSG.style.background = passColor;
+                        console.log(this.value.length);
+                    });
+
+                    /*passField.onkeyup = function (){
+                        console.log("hello ");
+                    } */   
+                }
+                
+            </script>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger editOnly" id="delbtn">Delete</button>
