@@ -55,7 +55,6 @@ echoheader();
             <ul class="dropdown-menu">
               <li><a href="" data-toggle="modal" data-target="#backuppw">Back Up</a></li>
               <li><a href="" data-toggle="modal" data-target="#import">Import</a></li>
-              <li><a id="navBtnExport">Export CSV</a></li>
               <li><a href="" data-toggle="modal" data-target="#changepwd">Change Password</a></li>
               <li id="changefieldsnav">
                   <a href="" data-toggle="modal" data-target="#changefields">Customize Fields</a>
@@ -222,8 +221,42 @@ echoheader();
                                 title="Show current password"><i class="glyphicon glyphicon-eye-open"></i></button>
                         </span>
                     </div>
+
+                    <span class="pass-chck-mesg"></span>
+                    <span id="pass-check-same"></span>
+
                 </div>
             </form>
+            <script>
+                window.onload = function (){
+                    var passField = document.querySelector("#edititeminputpw");
+                    var newMSG = document.querySelector('.pass-chck-mesg');
+                    var passStrenth;
+                    var passColor;
+                    passField.addEventListener('keyup', function (){
+                        if(this.value.length > 6){
+                            passStrenth = 50;
+                            passColor = "#88DD99";
+                        }else{
+                            passColor = "red";
+                            passStrenth = 10;
+                        }
+                        if(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()+=-\?;,./{}|\":<>\[\]\\\' ~_]).{8,}/.test(this.value)){
+                            passStrenth = 100;
+                            passColor = "green";
+                        }
+
+                        newMSG.style.width = passStrenth + "%";
+                        newMSG.style.background = passColor;
+                        console.log(this.value.length);
+                    });
+
+                    /*passField.onkeyup = function (){
+                        console.log("hello ");
+                    } */   
+                }
+                
+            </script>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger editOnly" id="delbtn">Delete</button>
@@ -277,18 +310,11 @@ echoheader();
                 <form method="post">
                     <div class="form-group">
                         <label for="importc" class="control-label">
-                            You can import passwords from CSV file or raw backup file. Select a .csv file or .raw file
+                            You can import passwords from raw backup file. Select a .raw file
                             to start.
                         </label>
-                        <input type="file" id="importc" accept=".csv,.raw" />
-                        <label class="small blocklabel">
-                            CSV file must contain a header line with columns including "name" and "password" - order is
-                            not important. You may edit your CSV with your password in Office so that the account field
-                            has a header called 'name' and the password field has a header called 'password'. Other
-                            columns will only be imported if they have the same header name as one of your additional
-                            fields. Note your CSV file must be in UTF-8 encoding. If not, open your CSV in some
-                            plaintext editor and change the encoding to UTF-8 before importing.
-                        </label>
+                        <input type="file" id="importc" accept=".raw" />
+                        
                     </div>
                 </form>
             </div>
